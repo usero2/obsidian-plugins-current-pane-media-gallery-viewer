@@ -55,6 +55,7 @@ If this plugin has improved your Obsidian workflow, saved you time, or you just 
 
 Your support is incredibly appreciated, helps fix bugs, and keeps this project alive and growing. 🙏
 
+https://buymeacoffee.com/endofday
 <a href="https://www.buymeacoffee.com/endofday" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
 *(Note: Please replace the link above with your actual BuyMeACoffee, Ko-fi, or Patreon link!)*
