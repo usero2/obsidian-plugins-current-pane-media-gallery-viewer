@@ -4,6 +4,8 @@ A powerful and dynamic media gallery plugin for Obsidian. It automatically gathe
 
 Perfect for visual thinkers, researchers, and anyone who works with media-heavy notes!
 
+![](https://github.com/usero2/obsidian-plugins-current-pane-media-gallery-viewer/blob/main/images/MK6BKFLqPS.gif)
+
 ## ✨ Features
 
 - **Automatic Media Extraction**: Instantly scans your active note and displays all embedded images and videos.
