@@ -16,6 +16,10 @@ Perfect for visual thinkers, researchers, and anyone who works with media-heavy 
   - **Document to Gallery**: Move your cursor or click on an image in your note, and the gallery will automatically scroll to and highlight the corresponding media.
   - **Gallery to Document**: Click on any media in the gallery pane, and your document will automatically scroll to that exact location. It works seamlessly in both **Live Preview/Source Mode** and **Reading Mode**.
 - **Double-Click to Zoom**: Double-click any image in the gallery to open a beautiful, full-screen native zoom modal.
+- **Context Menu**: Right-click any image in the gallery to access powerful options:
+  - **Copy to Clipboard**: Quickly copy images to your system clipboard.
+  - **Open in System Explorer**: Jump directly to the physical file on your computer.
+  - **Delete Image**: Delete the file from your vault and automatically clean up its markdown references in the active document.
 - **Occurrence Cycling**: If you use the exact same image multiple times in a document, clicking its thumbnail in the gallery will intelligently cycle through each occurrence in your note.
 - **6 Beautiful Layouts**: Choose how you want to view your media:
   - **Masonry**: A gapless, left-to-right cascading layout.

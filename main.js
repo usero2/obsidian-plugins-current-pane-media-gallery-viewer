@@ -283,6 +283,69 @@ class MediaViewerView extends obsidian.ItemView {
                 }
             });
 
+            wrapper.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                syncToDocument();
+                
+                if (!item.file) return; // Only show context menu for local files
+                
+                const menu = new obsidian.Menu();
+                
+                menu.addItem((menuItem) => {
+                    menuItem.setTitle("Copy image to clipboard")
+                        .setIcon("copy")
+                        .onClick(() => {
+                            try {
+                                const { clipboard, nativeImage } = require('electron');
+                                const fullPath = this.plugin.app.vault.adapter.getBasePath() + '/' + item.file.path;
+                                const image = nativeImage.createFromPath(fullPath);
+                                clipboard.writeImage(image);
+                                new obsidian.Notice("Image copied to clipboard");
+                            } catch (err) {
+                                new obsidian.Notice("Failed to copy image to clipboard");
+                                console.error(err);
+                            }
+                        });
+                });
+                
+                menu.addItem((menuItem) => {
+                    menuItem.setTitle("Open in system explorer")
+                        .setIcon("folder")
+                        .onClick(() => {
+                            this.plugin.app.showInFolder(item.file.path);
+                        });
+                });
+                
+                menu.addSeparator();
+                
+                menu.addItem((menuItem) => {
+                    menuItem.setTitle("Delete image")
+                        .setIcon("trash")
+                        .onClick(async () => {
+                            try {
+                                const activeFile = this.plugin.currentDisplayedFile;
+                                if (activeFile) {
+                                    let content = await this.plugin.app.vault.read(activeFile);
+                                    if (item.matches) {
+                                        for (const matchText of item.matches) {
+                                            content = content.split(matchText).join("");
+                                        }
+                                        await this.plugin.app.vault.modify(activeFile, content);
+                                    }
+                                }
+                                await this.plugin.app.vault.trash(item.file, true);
+                                new obsidian.Notice("Image deleted");
+                            } catch (err) {
+                                new obsidian.Notice("Failed to delete image");
+                                console.error(err);
+                            }
+                        });
+                });
+                
+                menu.showAtMouseEvent(e);
+            });
+
             let mediaEl;
             if (item.type === "image") {
                 mediaEl = wrapper.createEl("img");
@@ -613,10 +676,11 @@ class CurrentPaneMediaViewerPlugin extends obsidian.Plugin {
         const mediaMap = new Map();
         let match;
         
-        const processPath = (mediaPath, matchIndex) => {
+        const processPath = (mediaPath, matchIndex, matchText) => {
             const actualPath = mediaPath.split('|')[0].trim();
             if (mediaMap.has(actualPath)) {
                 mediaMap.get(actualPath).offsets.push(matchIndex);
+                mediaMap.get(actualPath).matches.push(matchText);
                 return;
             }
             
@@ -631,9 +695,9 @@ class CurrentPaneMediaViewerPlugin extends obsidian.Plugin {
                 const resourcePath = this.app.vault.getResourcePath(destFile);
                 
                 if (imageExts.includes(ext)) {
-                    mediaItem = { src: destFile.path, type: "image", resourcePath: resourcePath, offsets: [matchIndex] };
+                    mediaItem = { src: destFile.path, type: "image", resourcePath: resourcePath, offsets: [matchIndex], file: destFile, matches: [matchText] };
                 } else if (videoExts.includes(ext)) {
-                    mediaItem = { src: destFile.path, type: "video", resourcePath: resourcePath, offsets: [matchIndex] };
+                    mediaItem = { src: destFile.path, type: "video", resourcePath: resourcePath, offsets: [matchIndex], file: destFile, matches: [matchText] };
                 }
             } else if (actualPath.startsWith('http://') || actualPath.startsWith('https://')) {
                 const ext = actualPath.split('?')[0].split('.').pop().toLowerCase();
@@ -641,9 +705,9 @@ class CurrentPaneMediaViewerPlugin extends obsidian.Plugin {
                 const videoExts = ['mp4', 'webm', 'ogg', 'mov'];
                 
                 if (imageExts.includes(ext) || actualPath.includes('image')) {
-                     mediaItem = { src: actualPath, type: "image", resourcePath: actualPath, offsets: [matchIndex] };
+                     mediaItem = { src: actualPath, type: "image", resourcePath: actualPath, offsets: [matchIndex], matches: [matchText] };
                 } else if (videoExts.includes(ext)) {
-                     mediaItem = { src: actualPath, type: "video", resourcePath: actualPath, offsets: [matchIndex] };
+                     mediaItem = { src: actualPath, type: "video", resourcePath: actualPath, offsets: [matchIndex], matches: [matchText] };
                 }
             }
 
@@ -655,7 +719,7 @@ class CurrentPaneMediaViewerPlugin extends obsidian.Plugin {
 
         while ((match = regex.exec(content)) !== null) {
             const mediaPath = match[1] || match[2];
-            if (mediaPath) processPath(mediaPath, match.index);
+            if (mediaPath) processPath(mediaPath, match.index, match[0]);
         }
         
         mediaView.setMediaList(mediaItems);
