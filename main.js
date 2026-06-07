@@ -317,6 +317,18 @@ class MediaViewerView extends obsidian.ItemView {
                         });
                 });
                 
+                menu.addItem((menuItem) => {
+                    menuItem.setTitle("Reveal file in navigation")
+                        .setIcon("compass")
+                        .onClick(() => {
+                            const fileExplorerLeaf = this.plugin.app.workspace.getLeavesOfType("file-explorer")[0];
+                            if (fileExplorerLeaf) {
+                                this.plugin.app.workspace.revealLeaf(fileExplorerLeaf);
+                                fileExplorerLeaf.view.revealInFolder(item.file);
+                            }
+                        });
+                });
+                
                 menu.addSeparator();
                 
                 menu.addItem((menuItem) => {
@@ -677,7 +689,18 @@ class CurrentPaneMediaViewerPlugin extends obsidian.Plugin {
         let match;
         
         const processPath = (mediaPath, matchIndex, matchText) => {
-            const actualPath = mediaPath.split('|')[0].trim();
+            let actualPath = mediaPath.split('|')[0].trim();
+            
+            // Remove optional title from markdown links (e.g. "path/to/img.jpg 'title'")
+            actualPath = actualPath.replace(/\s+['"].*['"]$/, '');
+            
+            try {
+                // Decode URI component for local files to handle spaces (%20)
+                if (!actualPath.startsWith('http://') && !actualPath.startsWith('https://')) {
+                    actualPath = decodeURIComponent(actualPath);
+                }
+            } catch(e) {}
+
             if (mediaMap.has(actualPath)) {
                 mediaMap.get(actualPath).offsets.push(matchIndex);
                 mediaMap.get(actualPath).matches.push(matchText);

@@ -19,6 +19,7 @@ Perfect for visual thinkers, researchers, and anyone who works with media-heavy 
 - **Context Menu**: Right-click any image in the gallery to access powerful options:
   - **Copy to Clipboard**: Quickly copy images to your system clipboard.
   - **Open in System Explorer**: Jump directly to the physical file on your computer.
+  - **Reveal file in navigation**: Locate the image file in your Obsidian File Explorer.
   - **Delete Image**: Delete the file from your vault and automatically clean up its markdown references in the active document.
 - **Occurrence Cycling**: If you use the exact same image multiple times in a document, clicking its thumbnail in the gallery will intelligently cycle through each occurrence in your note.
 - **6 Beautiful Layouts**: Choose how you want to view your media:
@@ -30,8 +31,12 @@ Perfect for visual thinkers, researchers, and anyone who works with media-heavy 
   - **Fit All**: Packs all media compactly to fit the pane without scrollbars.
 - **Lazy-Rendering Support**: Built with robust native DOM handling. Clicking media in the gallery works perfectly even for items buried deep at the bottom of extremely long notes in Reading Mode.
 
-## 🛠️ Installation
+## 🆕 What's New in 1.0.2
 
+- **Feature:** Added **Reveal file in navigation** to the context menu, allowing you to instantly locate media files in the Obsidian File Explorer.
+- **Bug Fix:** Fixed an issue where images with spaces in their names or folder paths (URL-encoded as `%20`) were failing to load in the gallery pane.
+
+## 🛠️ Installation
 1. Download the latest release from the GitHub repository.
 2. Extract the folder into your Obsidian vault's plugin directory: `.obsidian/plugins/`
 3. Restart Obsidian.
