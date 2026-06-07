@@ -1,0 +1,13 @@
+{
+  "id": "current-pane-media-gallery-viewer",
+  "name": "Current Pane Media Gallery Viewer",
+  "version": "1.0.1",
+  "minAppVersion": "0.15.0",
+  "description": "Preview media (image/video) under cursor in the right pane during editor mode.",
+  "author": "usero2-endofday",
+  "authorUrl": "https://github.com/usero2",
+  "fundingUrl": {
+		"Buy me a Coffee": "https://buymeacoffee.com/endofday"
+	},
+  "isDesktopOnly": false
+}
